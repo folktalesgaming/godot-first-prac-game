@@ -1,0 +1,76 @@
+[gd_scene load_steps=10 format=3 uid="uid://dgn3jij65g51n"]
+
+[ext_resource type="Texture2D" uid="uid://4d3mnfis6xc" path="res://Assets/Sunny-land-files/Sunny-land-assets-files/PNG/spritesheets/cherry.png" id="1_iiwdv"]
+
+[sub_resource type="GDScript" id="GDScript_27tii"]
+script/source = "extends Area2D
+
+func _on_body_entered(body):
+	if body.name == \"Player\":
+		Game.gold += 5
+		Utils.saveGame()
+		var tween = get_tree().create_tween()
+		var tween1 = get_tree().create_tween()
+		tween.tween_property(self, \"position\", position - Vector2(0, 35), 0.35)
+		tween1.tween_property(self, \"modulate:a\", 0, 0.3)
+		tween.tween_callback(queue_free)
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fm3oa"]
+radius = 7.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jw2xo"]
+atlas = ExtResource("1_iiwdv")
+region = Rect2(0, 0, 21, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_10v4s"]
+atlas = ExtResource("1_iiwdv")
+region = Rect2(21, 0, 21, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8bn2g"]
+atlas = ExtResource("1_iiwdv")
+region = Rect2(42, 0, 21, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_80sag"]
+atlas = ExtResource("1_iiwdv")
+region = Rect2(63, 0, 21, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_usqj6"]
+atlas = ExtResource("1_iiwdv")
+region = Rect2(84, 0, 21, 21)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1s41i"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jw2xo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_10v4s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8bn2g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_80sag")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_usqj6")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="Cherry" type="Area2D"]
+script = SubResource("GDScript_27tii")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -1)
+shape = SubResource("CircleShape2D_fm3oa")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_1s41i")
+animation = &"idle"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
